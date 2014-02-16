@@ -1,0 +1,5 @@
+<ul>
+  <% @levels.each do |level| %>
+    <li><%= link_to level.file_name, level_path(level) %></li>
+  <% end %>
+</ul>
