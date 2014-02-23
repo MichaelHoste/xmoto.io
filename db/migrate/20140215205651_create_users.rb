@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string  :picture
       t.string  :gender
       t.string  :locale
+      t.string  :provider
 
       t.integer  :f_id,         :limit => 8
       t.string   :f_token
@@ -13,6 +14,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string   :f_middle_name
       t.string   :f_last_name
       t.string   :f_username
+      t.string   :f_location
+      t.string   :f_location_id
       t.string   :f_link
       t.integer  :f_timezone
       t.datetime :f_updated_time

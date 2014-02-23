@@ -32,7 +32,7 @@ namespace :app  do
 end
 
 def new_tab(name, commands)
-  commands = ["/bin/bash #{Dir.pwd}/script/rename_tab.sh #{name}"] + commands
+  commands = ["/bin/bash #{Dir.pwd}/bin/rename_tab.sh #{name}"] + commands
   command_line = commands.collect! { |command| '-e \'tell application "Terminal" to do script "' + command + '" in front window\''}.join(' ')
   `osascript -e 'tell application "Terminal" to activate' \
              -e 'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down' \

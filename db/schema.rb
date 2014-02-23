@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140215205651) do
+ActiveRecord::Schema.define(version: 20140223232548) do
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "levels", force: true do |t|
     t.string   "file_name"
@@ -27,18 +43,31 @@ ActiveRecord::Schema.define(version: 20140215205651) do
     t.datetime "updated_at"
   end
 
+  create_table "user_user_links", force: true do |t|
+    t.integer  "user_id",    limit: 8
+    t.integer  "friend_id",  limit: 8
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_user_links", ["friend_id"], name: "index_user_user_links_on_friend_id", using: :btree
+  add_index "user_user_links", ["user_id"], name: "index_user_user_links_on_user_id", using: :btree
+
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.string   "picture"
     t.string   "gender"
     t.string   "locale"
+    t.string   "provider"
     t.integer  "f_id",               limit: 8
     t.string   "f_token"
     t.string   "f_first_name"
     t.string   "f_middle_name"
     t.string   "f_last_name"
     t.string   "f_username"
+    t.string   "f_location"
+    t.string   "f_location_id"
     t.string   "f_link"
     t.integer  "f_timezone"
     t.datetime "f_updated_time"

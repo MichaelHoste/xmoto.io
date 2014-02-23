@@ -1,7 +1,7 @@
 module LevelImportService
   def self.populate
     level_filenames = []
-    Dir.foreach('data/Levels') do |filename|
+    Dir.foreach('public/data/Levels') do |filename|
       next if filename == '.' or filename == '..'
       filename[0] = '' # remove first 'l'
       level_filenames << filename
@@ -13,7 +13,7 @@ module LevelImportService
       puts "Import level : #{filename}"
 
       # Open pack file
-      File.open("data/Levels/#{filename}", 'r') do |f|
+      File.open("public/data/Levels/#{filename}", 'r') do |f|
         xml_doc = Nokogiri::XML(f)
 
         level = Level.create!({ :file_name        => filename,

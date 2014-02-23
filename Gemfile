@@ -4,9 +4,9 @@ gem 'rails',             '4.0.2'
 
 # Base
 gem 'mysql2'
-gem 'sass-rails',        '~> 4.0.0'
-gem 'uglifier',          '>= 1.3.0'
-gem 'coffee-rails',      '~> 4.0.0'
+gem 'sass-rails',     '~> 4.0.0'
+gem 'uglifier',       '>= 1.3.0'
+gem 'coffee-rails',   '~> 4.0.0'
 gem 'jquery-rails'
 gem 'bootstrap-sass', '~> 3.1.1'
 
@@ -18,6 +18,10 @@ gem 'nokogiri'
 gem 'omniauth-facebook'
 gem 'koala'
 
+# Jobs
+gem 'delayed_job_active_record'
+gem 'daemons' # for delayed job
+
 # Stats
 gem 'newrelic_rpm'
 
@@ -28,7 +32,6 @@ gem 'airbrake'
 
 # Translation
 gem 'gettext_i18n_rails'
-
 
 # Development tools
 group :development do
