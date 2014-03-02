@@ -18,4 +18,10 @@ class Level < ActiveRecord::Base
   # Scopes
 
   # Class Methods
+
+  # Methods
+
+  def to_param
+     level_identifier
+   end
 end

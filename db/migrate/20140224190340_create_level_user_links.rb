@@ -4,7 +4,7 @@ class CreateLevelUserLinks < ActiveRecord::Migration
       t.integer :user_id
       t.integer :level_id
       t.integer :time
-      t.integer :frames
+      t.integer :steps
       t.integer :fps
 
       t.timestamps

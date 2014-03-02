@@ -13,7 +13,7 @@ class LevelUserLink < ActiveRecord::Base
   # Validations
 
   # user_id can be null for anonymous scores
-  validates :level_id, :time, :frames, :fps,
+  validates :level_id, :time, :steps, :fps,
             :presence => true
 
   # Callbacks

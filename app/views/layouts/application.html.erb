@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" href="/humans.txt">
+    <!--
     <link rel="shortcut icon" href="/favicon.png">
+    -->
 
     <title>XMoto.io</title>
 
@@ -35,7 +37,7 @@
     </a>
 
     <% if current_user %>
-      <div id="current-user" data-best-score-id="<%= yield :current_user_best_score_id %>">
+      <div id="current-user" data-best-score-id="<%= yield :current_user_best_score_id %>" data-best-score-steps="<%= yield :current_user_best_score_steps %>">
         <%= current_user.name %>
       </div>
     <% end %>

@@ -3,11 +3,11 @@ class LevelUserLinksController < ApplicationController
     @level = Level.find_by_level_identifier(params[:level])
     @score = @level.level_user_links.find_by_user_id(current_user.id)
 
-    new_values = { :time   => params[:time].to_i,
-                   :frames => params[:frames].to_i,
-                   :fps    => params[:fps].to_i }
+    new_values = { :time  => params[:time].to_i,
+                   :steps => params[:steps].to_i,
+                   :fps   => params[:fps].to_i }
 
-    if @score.present? && params[:frames].to_i < @score.frames
+    if @score.present? && params[:steps].to_i < @score.steps
       @score.update_attributes(new_values)
       save_file = true
     elsif @score.blank?
@@ -26,7 +26,7 @@ class LevelUserLinksController < ApplicationController
                         :score_id => @score.id }
     else
       render :json => { :success => false,
-                        :result  => 'not saved (not better score or something went wrong)' }
+                        :error   => 'not saved (not better score or something went wrong)' }
     end
   end
 end

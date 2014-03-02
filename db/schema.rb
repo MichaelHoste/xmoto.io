@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20140224190340) do
     t.integer  "user_id"
     t.integer  "level_id"
     t.integer  "time"
-    t.integer  "frames"
+    t.integer  "steps"
     t.integer  "fps"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(version: 20140224190340) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "levels", ["level_identifier"], name: "index_levels_on_level_identifier", unique: true, using: :btree
 
   create_table "user_user_links", force: true do |t|
     t.integer  "user_id",    limit: 8
