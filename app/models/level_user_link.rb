@@ -1,4 +1,4 @@
-class Score < ActiveRecord::Base
+class LevelUserLink < ActiveRecord::Base
   # Constants
 
   # Attributes

@@ -1,3 +1,5 @@
+<% content_for :current_user_best_score_id, @best_score.id.to_s %>
+
 <div style="position: relative;left: -500px;margin-left: 50%;margin-top: 20px;">
   <canvas id="game"   width="1000" height="600" data-current-level="<%= @level.file_name %>"></canvas>
   <canvas id="buffer" width="1500" height="900" style="display:none"></canvas>

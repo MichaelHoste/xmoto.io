@@ -16,6 +16,8 @@ class CreateLevels < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :levels, :level_identifier, :unique => true
+
     LevelImportService.populate
   end
 end

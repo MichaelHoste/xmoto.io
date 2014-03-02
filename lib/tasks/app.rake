@@ -25,9 +25,16 @@ namespace :app  do
     if Rails.env.production?
       puts "Cannot use this task in production"
     else
+      system('rm -rf public/data/Replays')
+      system('mkdir public/data/Replays')
       system('rake db:migrate:reset')
       system('rake db:seed')
     end
+  end
+
+  task :update_xmoto do
+    system('rm ./vendor/assets/javascripts/xmoto.js')
+    system('cp ../xmoto/bin/xmoto.js ./vendor/assets/javascripts/xmoto.js')
   end
 end
 

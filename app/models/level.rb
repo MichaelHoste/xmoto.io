@@ -7,7 +7,11 @@ class Level < ActiveRecord::Base
 
   # Associations
 
+  has_many :level_user_links
+
   # Validations
+
+  validates :level_identifier, :uniqueness => true
 
   # Callbacks
 
