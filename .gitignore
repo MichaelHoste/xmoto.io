@@ -28,6 +28,7 @@ pickle-email-*.html
 /config/email.yml
 /config/newrelic.yml
 /config/initializers/facebook.rb
+/config/initializers/pusher.rb
 /config/initializers/errbit.rb
 /config/initializers/madmimi.rb
 /config/backups/sokoban.rb

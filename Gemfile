@@ -18,6 +18,9 @@ gem 'nokogiri'
 gem 'omniauth-facebook'
 gem 'koala'
 
+# Pusher
+gem 'pusher'
+
 # Jobs
 gem 'delayed_job_active_record'
 gem 'daemons' # for delayed job

@@ -31,21 +31,25 @@
     <%= render 'layouts/google_analytics' %>
   </head>
 
-  <body>
+  <body id="<%= "#{params[:controller]}-#{params[:action]}" %>" ng-app="XMotoApp">
     <a href="https://github.com/michaelhoste/xmoto">
       <img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
     </a>
 
     <% if current_user %>
-      <div id="current-user" data-best-score-id="<%= yield :current_user_best_score_id %>" data-best-score-steps="<%= yield :current_user_best_score_steps %>">
+      <div id="current-user" data-id="<%= current_user.id if current_user %>"
+                             data-best-score-id="<%= yield :current_user_best_score_id %>"
+                             data-best-score-steps="<%= yield :current_user_best_score_steps %>">
         <%= current_user.name %>
       </div>
     <% end %>
 
     <div class="container">
       <%= yield %>
-      <%= javascript_include_tag "application" %>
     </div>
+
+    <%= javascript_include_tag "application" %>
+    <script src="http://js.pusher.com/2.2.0-rc1/pusher.min.js"></script>
   </body>
 </html>
 

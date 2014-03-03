@@ -1,15 +1,35 @@
 <% content_for :current_user_best_score_id,    @best_score.try(:id).to_s %>
 <% content_for :current_user_best_score_steps, @best_score.try(:steps).to_s %>
 
-<div style="position: relative;left: -500px;margin-left: 50%;margin-top: 20px;">
-  <canvas id="game"   width="1000" height="600" data-current-level="<%= @level.file_name %>"></canvas>
-  <canvas id="buffer" width="1500" height="900" style="display:none"></canvas>
+<div id="level" data-level-identifier="<%= @level.level_identifier %>">
+  <canvas id="game"   width="960"  height="600" data-current-level="<%= @level.file_name %>"></canvas>
+  <canvas id="buffer" width="1500" height="900"></canvas>
 
-  <div id="loading" style="position:absolute;top:100px;width:1000px;text-align:center">
+  <div id="loading">
     Loading, please wait...
   </div>
 
-  <div id="chrono" style="position:absolute;top:20px;left:872px;font-size:20px;background-color:black;color:white;padding:10px;width:104px;opacity:0.5;text-align:center">
+  <div id="chrono">
     0:00
+  </div>
+</div>
+
+<div id="scores" ng-controller="ScoresCtrl">
+  <div ng-repeat="score in scores" class="score"
+       data-id="{{ score.id }}"
+       data-steps="{{ score.steps }}"
+       data-fps="{{ score.fps }}"
+       data-user-id="{{ score.user_id }}"
+       title="creation date: {{ score.updated_at }}"
+       ng-cloak>
+    <div class="picture">
+      <img ng-src="{{ score.user_picture }}"/>
+    </div>
+    <div class="name">
+      {{ score.user_name }}
+    </div>
+    <div class="time">
+      {{ (score.steps / 60.0).toFixed(2).replace('.', ':') }}
+    </div>
   </div>
 </div>

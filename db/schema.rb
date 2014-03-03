@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(version: 20140224190340) do
     t.datetime "updated_at"
   end
 
+  add_index "level_user_links", ["level_id"], name: "index_level_user_links_on_level_id", using: :btree
+  add_index "level_user_links", ["user_id"], name: "index_level_user_links_on_user_id", using: :btree
+
   create_table "levels", force: true do |t|
     t.string   "file_name"
     t.string   "name"

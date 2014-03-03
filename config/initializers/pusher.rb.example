@@ -1,0 +1,15 @@
+# this file is not pushed on github, but deployed with capistrano
+
+# configuration for pusher
+# http://www.pusherapp.com and https://github.com/pusher/pusher-gem
+if Rails.env == 'production'
+  Pusher.app_id = '12345'
+  Pusher.key    = 'abcdaaaaaaaaaaaaaaaa'
+  Pusher.secret = 'bcdaaaaaaaaaaaaaaaaa'
+end
+
+if Rails.env == 'development'
+  Pusher.app_id = '23456'
+  Pusher.key    = 'defgaaaaaaaaaaaaaaaa'
+  Pusher.secret = 'cdeaaaaaaaaaaaaaaaaa'
+end

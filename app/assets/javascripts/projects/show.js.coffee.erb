@@ -1,0 +1,43 @@
+angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ($scope, $http) ->
+  level_identifier = $("#level").data('level-identifier')
+  current_user_id  = parseInt($('#current-user').data('id'))
+  url              = "/level_user_links.json?level=#{level_identifier}"
+
+  $scope.scores = []
+
+  $http.get(url).then((result) ->
+    $scope.scores = result.data
+    bind_pusher()
+  )
+
+  bind_pusher = ->
+    pusher  = new Pusher("<%= Pusher.key %>")
+    channel = pusher.subscribe(level_identifier)
+    channel.bind('new_score', (score) ->
+      add_score(score)
+    )
+
+  add_score = (new_score) ->
+    # remove old score for this user
+    for score, i in $scope.scores
+      if parseInt(score.user_id) == parseInt(new_score.user_id)
+         $scope.scores.splice(i, 1)
+
+    # place new score in array and sort array by steps
+    $scope.scores.push(new_score)
+    $scope.scores.sort((a, b) ->
+      console.log(current_user_id)
+      if a.steps < b.steps || (a.steps == b.steps && parseInt(b.user_id) == current_user_id)
+        return -1
+      else if b.steps < a.steps
+        return 1
+      else
+        return 0
+    )
+
+    $scope.$apply()
+
+    # Effect on new score
+    setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('pulsate', 'easeOutCubic', 1500)), 400)
+    setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('highlight', 'easeOutCirc', 1500)), 400)
+)

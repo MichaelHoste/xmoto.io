@@ -1,11 +1,11 @@
 class CreateLevelUserLinks < ActiveRecord::Migration
   def change
     create_table :level_user_links do |t|
-      t.integer :user_id
-      t.integer :level_id
-      t.integer :time
-      t.integer :steps
-      t.integer :fps
+      t.references :user,  :index => true
+      t.references :level, :index => true
+      t.integer    :time
+      t.integer    :steps
+      t.integer    :fps
 
       t.timestamps
     end
