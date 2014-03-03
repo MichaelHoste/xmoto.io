@@ -41,6 +41,7 @@ group :development do
   gem 'gettext',     :require => false # use "brew link --force gettext" to link to gettext on MacOS (brew was afraid to link)
   gem 'ruby_parser', :require => false
   gem 'capistrano'
+  gem 'capistrano-rails'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
