@@ -40,9 +40,13 @@
       <div id="current-user" data-id="<%= current_user.id if current_user %>"
                              data-best-score-id="<%= yield :current_user_best_score_id %>"
                              data-best-score-steps="<%= yield :current_user_best_score_steps %>">
-        <%= current_user.name %>
+        <%= _("You are connected as %{name}" % { :name => current_user.name }) %> |
+        <%= link_to _("Signout"), signout_path %>
       </div>
+    <% else %>
+      <%= link_to _("Connect with Facebook"), '/auth/facebook' %>
     <% end %>
+    <br/>
 
     <div class="container">
       <%= yield %>
