@@ -43,6 +43,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-foreman'
+  gem 'capistrano-rbenv'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
