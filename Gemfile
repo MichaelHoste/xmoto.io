@@ -30,7 +30,7 @@ gem 'newrelic_rpm'
 
 # Deployement
 gem 'foreman'
-gem 'unicorn'
+gem 'puma'
 gem 'airbrake'
 
 # Translation
@@ -42,6 +42,7 @@ group :development do
   gem 'ruby_parser', :require => false
   gem 'capistrano'
   gem 'capistrano-rails'
+  gem 'capistrano-foreman'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
