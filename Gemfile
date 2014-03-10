@@ -13,6 +13,7 @@ gem 'bootstrap-sass', '~> 3.1.1'
 # Utils
 gem 'sitemap_generator'
 gem 'nokogiri'
+gem 'carrierwave'
 
 # Facebook
 gem 'omniauth-facebook'

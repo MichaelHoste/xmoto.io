@@ -14,4 +14,15 @@ class LevelsController < ApplicationController
     @levels                = Level.where.not(:file_name => incompatible_levels)
     @levels_with_score_ids = current_user ? current_user.level_user_links.pluck(:level_id) : []
   end
+
+  def capture
+    @level = Level.find_by_level_identifier(params[:id])
+
+    image = Base64.decode64(params[:image]['data:image/png;base64,'.length .. -1])
+    File.open("public/data/Thumbs/#{@level.level_identifier}.png", 'wb') do |file|
+      file.write(image)
+    end
+
+    render :nothing => true
+  end
 end

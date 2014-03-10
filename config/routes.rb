@@ -1,7 +1,12 @@
 XmotoIo::Application.routes.draw do
   root 'levels#index'
 
-  resources :levels
+  resources :levels do
+    member do
+      post :capture
+    end
+  end
+
   resources :level_user_links
 
   # OmniAuth (facebook)

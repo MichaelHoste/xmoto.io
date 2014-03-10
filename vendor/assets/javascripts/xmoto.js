@@ -416,6 +416,7 @@
       var _this = this;
       $(document).off('keydown');
       $(document).on('keydown', function(event) {
+        var url;
         switch (event.which || event.keyCode) {
           case 38:
             return _this.up = true;
@@ -433,7 +434,9 @@
             }
             break;
           case 67:
-            return $.post('capture', {
+            url = document.URL;
+            url = url.substr(url.length - 1) !== '/' ? "" + url + "/capture" : "" + url + "capture";
+            return $.post(url, {
               steps: _this.level.physics.steps,
               image: $("#game")[0].toDataURL()
             });
