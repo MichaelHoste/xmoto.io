@@ -2,7 +2,7 @@ set :application, 'xmoto_io'
 set :repo_url,    'git@github.com:MichaelHoste/xmoto_io.git'
 set :deploy_to,   "/home/deploy/apps/xmoto_io"
 set :linked_files, %w{config/database.yml config/initializers/pusher.rb config/initializers/facebook.rb}
-set :linked_dirs,  %w{bin log tmp vendor/bundle public/system public/data/Replays}
+set :linked_dirs,  %w{bin log tmp vendor/bundle public/system public/data/Replays public/data/Previews}
 
 set :rbenv_type, 'user'
 set :rbenv_ruby, `cat .ruby-version`.strip

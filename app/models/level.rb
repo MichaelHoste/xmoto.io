@@ -1,6 +1,9 @@
 # encoding: utf-8
 
 class Level < ActiveRecord::Base
+
+  mount_uploader :preview, PreviewUploader
+
   # Constants
 
   # Attributes

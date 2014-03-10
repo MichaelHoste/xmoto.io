@@ -33,6 +33,7 @@ pickle-email-*.html
 /config/initializers/madmimi.rb
 /config/backups/sokoban.rb
 /config/backup.rb
-/public/images/levels
 /public/data/Replays
+/public/data/Previews/*.jpg
+/public/data/Previews/*.png
 /private

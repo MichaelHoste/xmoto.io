@@ -19,9 +19,12 @@ class LevelsController < ApplicationController
     @level = Level.find_by_level_identifier(params[:id])
 
     image = Base64.decode64(params[:image]['data:image/png;base64,'.length .. -1])
-    File.open("public/data/Thumbs/#{@level.level_identifier}.png", 'wb') do |file|
+    File.open("tmp/#{@level.level_identifier}.png", 'wb') do |file|
       file.write(image)
     end
+
+    @level.preview = File.open("tmp/#{@level.level_identifier}.png")
+    @level.save!
 
     render :nothing => true
   end

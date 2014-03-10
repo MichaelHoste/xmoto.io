@@ -1,7 +1,12 @@
 <ul>
   <% @levels.each do |level| %>
     <li>
-      <%= link_to level.file_name, level_path(level) %>
+      <% if !level.preview.thumb.file %>
+        <%= link_to level.file_name, level_path(level) %>
+      <% else %>
+        <%= link_to image_tag(level.preview.url(:thumb).gsub('.png', '.jpg')), level_path(level) %>
+      <% end %>
+
       <% if level.id.in? @levels_with_score_ids %>
         (score)
       <% end %>

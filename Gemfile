@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',             '4.0.2'
+gem 'rails',          '4.0.3'
 
 # Base
 gem 'mysql2'
@@ -14,6 +14,8 @@ gem 'bootstrap-sass', '~> 3.1.1'
 gem 'sitemap_generator'
 gem 'nokogiri'
 gem 'carrierwave'
+gem 'carrierwave-processing'
+gem 'rmagick'
 
 # Facebook
 gem 'omniauth-facebook'
