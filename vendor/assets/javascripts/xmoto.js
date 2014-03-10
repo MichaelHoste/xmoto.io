@@ -439,6 +439,10 @@
             return $.post(url, {
               steps: _this.level.physics.steps,
               image: $("#game")[0].toDataURL()
+            }).done(function() {
+              return console.log("Capture uploaded");
+            }).fail(function() {
+              return console.log("Capture failed");
             });
         }
       });
