@@ -1,5 +1,10 @@
 <ul>
   <% @levels.each do |level| %>
-    <li><%= link_to level.file_name, level_path(level) %></li>
+    <li>
+      <%= link_to level.file_name, level_path(level) %>
+      <% if level.id.in? @levels_with_score_ids %>
+        (score)
+      <% end %>
+    </li>
   <% end %>
 </ul>

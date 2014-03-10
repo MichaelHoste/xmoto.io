@@ -8,6 +8,7 @@ class LevelsController < ApplicationController
   end
 
   def index
-    @levels = Level.all
+    @levels                = Level.all
+    @levels_with_score_ids = current_user ? current_user.level_user_links.pluck(:level_id) : []
   end
 end

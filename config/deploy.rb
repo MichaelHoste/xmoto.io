@@ -1,22 +1,21 @@
-# config valid only for Capistrano 3.1
-lock '3.1.0'
-
 set :application, 'xmoto_io'
 set :repo_url,    'git@github.com:MichaelHoste/xmoto_io.git'
-set :deploy_to,   "/home/#{user}/apps/#{application}"
+set :deploy_to,   "/home/deploy/apps/xmoto_io"
 set :linked_files, %w{config/database.yml config/initializers/pusher.rb config/initializers/facebook.rb}
-set :linked_dirs,  %w{bin log tmp vendor/bundle public/system public/data}
-
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :linked_dirs,  %w{bin log tmp vendor/bundle public/system public/data/Replays}
 
 set :rbenv_type, 'user'
-set :rbenv_ruby, '2.1.0' # TODO : try  "set :rbenv_ruby, `cat .ruby-version`.strip"
+set :rbenv_ruby, `cat .ruby-version`.strip
 
-set :foreman_sudo,        'sudo'
-set :foreman_concurrency, '-c web=1,worker=1'
+# had to put "deploy ALL=NOPASSWD: ALL" in the "sudo visudo" file to allow
+# capistrano to start foreman
+set :foreman_concurrency, 'web=1,worker=1'
+set :foreman_procfile,    'Procfile.production'
+set :foreman_env,         'env.production'
+set :foreman_log,         "#{deploy_to}/shared/log"
+set :foreman_user,        'deploy'
 
-set :keep_releases, 10
+set :keep_releases, 3
 
 namespace :deploy do
   desc 'Restart application'
@@ -24,11 +23,6 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       # execute :touch, release_path.join('tmp/restart.txt')
-      sudo "unlink /etc/nginx/sites-enabled/#{application};true"
-      sudo "ln -s #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{application};true"
-
-      foreman.export
-      foreman.restart
     end
   end
 
@@ -40,6 +34,17 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+    end
+  end
+
+  after :updated, :upload_config_files do
+    on roles(:app) do
+      upload! "config/initializers/facebook.rb", "#{deploy_to}/shared/config/initializers/facebook.rb"
+      upload! "config/initializers/pusher.rb",   "#{deploy_to}/shared/config/initializers/pusher.rb"
+      upload! "config/database.yml",             "#{deploy_to}/shared/config/database.yml"
+
+      execute :sudo, "unlink /etc/nginx/sites-enabled/#{fetch(:application)};true"
+      execute :sudo, "ln -s #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{fetch(:application)};true"
     end
   end
 end

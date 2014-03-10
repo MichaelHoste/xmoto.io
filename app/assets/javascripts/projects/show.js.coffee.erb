@@ -1,4 +1,4 @@
-angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ($scope, $http) ->
+angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope", "$http", ($scope, $http) ->
   level_identifier = $("#level").data('level-identifier')
   current_user_id  = parseInt($('#current-user').data('id'))
   url              = "/level_user_links.json?level=#{level_identifier}"
@@ -40,4 +40,4 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ($scope, $
     # Effect on new score
     setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('pulsate', 'easeOutCubic', 1500)), 400)
     setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('highlight', 'easeOutCirc', 1500)), 400)
-)
+])

@@ -16,6 +16,11 @@ class User < ActiveRecord::Base
   has_many :friends,
            :through => :user_user_links
 
+  has_many :level_user_links
+
+  has_many :levels,
+           :through => :level_user_links
+
   # Nested attributes
 
   # Validations

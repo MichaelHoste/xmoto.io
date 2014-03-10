@@ -32,6 +32,7 @@ gem 'newrelic_rpm'
 gem 'foreman'
 gem 'puma'
 gem 'airbrake'
+gem 'therubyracer'
 
 # Translation
 gem 'gettext_i18n_rails'

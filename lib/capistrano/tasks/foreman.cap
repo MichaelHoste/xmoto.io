@@ -1,0 +1,43 @@
+namespace :foreman do
+  desc 'Export the Procfile to Ubuntu upstart scripts'
+  task :export do
+    on roles(:app) do |host|
+      within release_path do
+        as :deploy do
+          execute :bundle, "exec foreman export upstart /tmp/foreman_#{fetch(:application)} -a #{fetch(:application)} -u #{fetch(:foreman_user)} -l #{fetch(:foreman_log)} -f #{fetch(:foreman_procfile)} -e #{fetch(:foreman_env)} -c #{fetch(:foreman_concurrency)}"
+          execute :sudo, "cp -f /tmp/foreman_#{fetch(:application)}/*.conf /etc/init/"
+        end
+      end
+    end
+  end
+
+  desc 'Start the application services'
+  task :start do
+    on roles(:app) do |host|
+      as :deploy do
+        execute :sudo, "start #{fetch(:application)}"
+      end
+    end
+  end
+
+  desc 'Stop the application services'
+  task :stop do
+    on roles(:app) do |host|
+      as :deploy do
+        execute :sudo, "stop #{fetch(:application)}"
+      end
+    end
+  end
+
+  desc 'Restart the application services'
+  task :restart do
+    on roles(:app) do |host|
+      as :deploy do
+        execute "sudo start #{fetch(:application)} || sudo restart #{fetch(:application)}"
+      end
+    end
+  end
+
+  before 'deploy:publishing', 'foreman:export'
+  before 'deploy:publishing', 'foreman:restart'
+end
