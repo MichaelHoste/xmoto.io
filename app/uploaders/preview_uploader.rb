@@ -14,7 +14,7 @@ class PreviewUploader < CarrierWave::Uploader::Base
   version :thumb do
     process :convert        => 'jpg'
     process :resize_to_fill => [400, 250]
-    process :quality        => 70
+    process :quality        => 85
 
     def filename
       super.chomp(File.extname(super)) + '.jpg'
