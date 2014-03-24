@@ -34,7 +34,7 @@ namespace :app  do
 
   task :update_xmoto do
     system('rm ./vendor/assets/javascripts/xmoto.js')
-    system('cp ../xmoto/bin/xmoto.js ./vendor/assets/javascripts/xmoto.js')
+    system('cp ../xmoto_js/bin/xmoto.js ./vendor/assets/javascripts/xmoto.js')
   end
 end
 
