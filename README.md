@@ -15,7 +15,7 @@ More about the project development on http://xmoto.io
 
 ## Demo
 
-an Ugly / Bugged / not complete alpha version is regularly deployed here: http://alpha.xmoto.io
+an ugly / bugged / not complete alpha version is regularly deployed here: http://alpha.xmoto.io
 
 Currently the best scores and replays of each user for each level are saved in the backend. That alpha version is not yet for production and your scores will be erased from time to time.
 
