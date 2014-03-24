@@ -8,6 +8,8 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
   $http.get(url).then((result) ->
     $scope.scores = result.data
     bind_pusher()
+    level_file_name = $('#xmoto').attr('data-current-level')
+    $.xmoto(level_file_name)
   )
 
   bind_pusher = ->

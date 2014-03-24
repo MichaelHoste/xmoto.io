@@ -4,9 +4,7 @@ namespace :app  do
       puts "Cannot use this task in production"
     else
       # the ruby version is automatically defined in the .rbenv-version file
-      [ 'git submodule update --init --recursive',           # get submodules of this project
-        'git submodule foreach git pull origin master',      # update submodules of this project
-        'rm log/*.log',                                      # rm log files
+      [ 'rm log/*.log',                                      # rm log files
         "/bin/bash #{Dir.pwd}/bin/rename_tab.sh Server"      #
       ].each do |command|
         puts command
