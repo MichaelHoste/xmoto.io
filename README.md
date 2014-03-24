@@ -1,9 +1,9 @@
 XMoto.io
 ========
 
-Social layer and backend for replays on top of [XMoto.js](https://github.com/MichaelHoste/xmoto.js).
+Social layer and backend for replays, on top of [XMoto.js](https://github.com/MichaelHoste/xmoto.js).
 
-The social layer will be inspired by another project of mine : http://sokoban-game.com ([Fork Me](https://github.com/MichaelHoste/sokoban)). This game got 3000 registered users and 100 000 levels solved in less than a year, with almost no communication (only Facebook).
+The social layer will be inspired by another project of mine : http://sokoban-game.com ([GitHub](https://github.com/MichaelHoste/sokoban)). This game got 3000+ registered users and 100 000+ levels solved in less than a year, with almost no communication (only Facebook).
 
 <!-- [![Image](http://js.xmoto.io/image.jpg)](http://js.xmoto.io) -->
 
