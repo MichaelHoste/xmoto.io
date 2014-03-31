@@ -47,4 +47,14 @@ namespace :deploy do
       execute :sudo, "ln -s #{deploy_to}/current/config/nginx.conf /etc/nginx/sites-enabled/#{fetch(:application)};true"
     end
   end
+
+  # Reset the entire application (CAREFUL!)
+  task :force_reset do
+    execute 'rm -rf public/data/Replays'
+    execute 'mkdir public/data/Replays'
+    execute 'rm -rf public/data/Previews'
+    execute 'mkdir public/data/Previews'
+    execute 'bundle exec rake db:migrate:reset'
+    execute 'bundle exec rake db:seed'
+  end
 end
