@@ -23,7 +23,7 @@
     <% end %>
   <% end %>
 
-  <% if level.level_user_links.where(:user_id => current_user.id) %>
+  <% if level.level_user_links.where(:user_id => current_user.id).present? %>
     score
   <% end %>
   <br/>
