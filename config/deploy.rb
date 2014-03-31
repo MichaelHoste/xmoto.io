@@ -37,7 +37,7 @@ namespace :deploy do
     end
   end
 
-  after :updated, :upload_config_files do
+  after :started, :upload_config_files do
     on roles(:app) do
       upload! "config/initializers/facebook.rb", "#{deploy_to}/shared/config/initializers/facebook.rb"
       upload! "config/initializers/pusher.rb",   "#{deploy_to}/shared/config/initializers/pusher.rb"

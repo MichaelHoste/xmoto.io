@@ -41,8 +41,7 @@ class User < ActiveRecord::Base
   # Methods
 
   def self.from_omniauth(auth)
-    User.where(:provider => 'facebook', :f_id => auth.uid).first_or_initialize.tap do |user|
-      user.provider       = auth.provider
+    User.where(:f_id => auth.uid).first_or_initialize.tap do |user|
       user.f_id           = auth.uid
       user.name           = auth.info.name
       user.email          = auth.info.email

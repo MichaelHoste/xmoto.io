@@ -6,7 +6,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string  :picture
       t.string  :gender
       t.string  :locale
-      t.string  :provider
 
       t.integer  :f_id,         :limit => 8
       t.string   :f_token
