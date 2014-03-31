@@ -26,7 +26,6 @@ gem 'pusher'
 
 # Jobs
 gem 'delayed_job_active_record'
-gem 'daemons' # for delayed job
 
 # Stats
 gem 'newrelic_rpm'
@@ -49,15 +48,3 @@ group :development do
   gem 'capistrano-foreman'
   gem 'capistrano-rbenv'
 end
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 1.2'
-
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

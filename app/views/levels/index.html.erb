@@ -1,15 +1,26 @@
-<ul>
-  <% @levels.each do |level| %>
-    <li>
-      <% if !level.preview.thumb.file %>
-        <%= link_to level.file_name, level_path(level) %>
-      <% else %>
-        <%= link_to image_tag(level.preview.url(:thumb).gsub('.png', '.jpg')), level_path(level) %>
-      <% end %>
+<% @levels.each do |level| %>
+  <% if !level.preview.thumb.file %>
+    <%= link_to level.file_name, level_path(level) %>
+  <% else %>
+    <%= link_to level_path(level) do %>
+      <%= image_tag(level.preview.url(:thumb).gsub('.png', '.jpg')) %>
 
-      <% if level.id.in? @levels_with_score_ids %>
-        (score)
-      <% end %>
-    </li>
+      <canvas id="level_<%= level.id %>"
+              width="400"
+              height="250"
+              data-current-level="<%= level.file_name %>"
+              data-current-level-id="<%= level.id %>"
+              data-replay-file="<%= level.level_user_links.first.id %>.replay">
+      </canvas>
+
+      <div id="loading_<%= level.id %>" class="loading">
+        Loading, please wait...
+      </div>
+
+      <div id="chrono<%= level.id %>" class="chrono">
+        0:00
+      </div>
+    <% end %>
   <% end %>
-</ul>
+  <br/>
+<% end %>

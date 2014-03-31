@@ -10,15 +10,16 @@
     function Buffer(level) {
       var buffer_html;
       this.level = level;
-      buffer_html = "<canvas id=\"buffer\" width=\"" + (parseFloat(this.level.canvas.width) * 1.5) + "\"                                         height=\"" + (parseFloat(this.level.canvas.height) * 1.5) + "\">                   </canvas>";
+      buffer_html = "<canvas id=\"buffer\"                           width=\"" + (parseFloat(this.level.canvas.width) * 1.5) + "\"                           height=\"" + (parseFloat(this.level.canvas.height) * 1.5) + "\"                           style=\"display:none\">                   </canvas>";
       $(buffer_html).insertAfter(this.level.options.canvas);
       this.canvas = $("#buffer").get(0);
       this.ctx = this.canvas.getContext('2d');
+      this.camera = this.level.camera;
       this.buffer_scale = {
-        x: this.level.camera.scale.x,
-        y: this.level.camera.scale.y
+        x: this.camera.scale.x,
+        y: this.camera.scale.y
       };
-      this.scale = this.level.camera.scale;
+      this.scale = this.camera.scale;
       this.sky = this.level.sky;
       this.limits = this.level.limits;
       this.entities = this.level.entities;
@@ -31,22 +32,22 @@
     };
 
     Buffer.prototype.redraw_needed = function() {
-      var moto;
+      var target;
       if (!this.canvas_width) {
         return true;
       }
       if (this.visible) {
-        moto = this.level.object_to_follow();
-        if (this.visible.right < moto.position().x + (this.level.canvas_width / 2) / this.scale.x) {
+        target = this.camera.target();
+        if (this.visible.right < target.x + (this.level.canvas_width / 2) / this.scale.x) {
           return true;
         }
-        if (this.visible.left > moto.position().x - (this.level.canvas_width / 2) / this.scale.x) {
+        if (this.visible.left > target.x - (this.level.canvas_width / 2) / this.scale.x) {
           return true;
         }
-        if (this.visible.top < moto.position().y - (this.level.canvas_height / 2) / this.scale.y) {
+        if (this.visible.top < target.y - (this.level.canvas_height / 2) / this.scale.y) {
           return true;
         }
-        if (this.visible.bottom > moto.position().y + (this.level.canvas_height / 2) / this.scale.y) {
+        if (this.visible.bottom > target.y + (this.level.canvas_height / 2) / this.scale.y) {
           return true;
         }
       }
@@ -54,14 +55,14 @@
     };
 
     Buffer.prototype.redraw = function() {
-      var moto;
-      moto = this.level.object_to_follow();
+      var target;
+      target = this.camera.target();
       if (!this.canvas_width) {
         this.init_canvas();
       }
-      this.moto_position = {
-        x: moto.position().x,
-        y: moto.position().y
+      this.target_position = {
+        x: target.x,
+        y: target.y
       };
       this.buffer_scale = {
         x: this.scale.x > Constants.default_scale.x ? Constants.default_scale.x : this.scale.x,
@@ -72,7 +73,7 @@
       this.ctx.save();
       this.ctx.translate(this.canvas_width / 2, this.canvas_height / 2);
       this.ctx.scale(this.buffer_scale.x, this.buffer_scale.y);
-      this.ctx.translate(-moto.position().x, -moto.position().y - 0.25);
+      this.ctx.translate(-target.x, -target.y - 0.25);
       this.limits.display(this.ctx);
       this.entities.display_sprites(this.ctx);
       this.blocks.display(this.ctx);
@@ -80,13 +81,13 @@
     };
 
     Buffer.prototype.compute_visibility = function() {
-      var moto;
-      moto = this.level.object_to_follow();
+      var target;
+      target = this.camera.target();
       this.visible = {
-        left: moto.position().x - (this.canvas_width / 2) / this.buffer_scale.x,
-        right: moto.position().x + (this.canvas_width / 2) / this.buffer_scale.x,
-        bottom: moto.position().y + (this.canvas_height / 2) / this.buffer_scale.y,
-        top: moto.position().y - (this.canvas_height / 2) / this.buffer_scale.y
+        left: target.x - (this.canvas_width / 2) / this.buffer_scale.x,
+        right: target.x + (this.canvas_width / 2) / this.buffer_scale.x,
+        bottom: target.y + (this.canvas_height / 2) / this.buffer_scale.y,
+        top: target.y - (this.canvas_height / 2) / this.buffer_scale.y
       };
       this.visible.aabb = new b2AABB();
       this.visible.aabb.lowerBound.Set(this.visible.left, this.visible.bottom);
@@ -94,16 +95,16 @@
     };
 
     Buffer.prototype.display = function() {
-      var buffer_center_x, buffer_center_y, canvas_center_x, canvas_center_y, clipped_height, clipped_width, margin_zoom_x, margin_zoom_y, moto, translate_x, translate_y;
-      moto = this.level.object_to_follow();
+      var buffer_center_x, buffer_center_y, canvas_center_x, canvas_center_y, clipped_height, clipped_width, margin_zoom_x, margin_zoom_y, target, translate_x, translate_y;
+      target = this.camera.target();
       buffer_center_x = this.canvas_width / 2;
       canvas_center_x = this.level.canvas_width / 2;
-      translate_x = (moto.position().x - this.moto_position.x) * this.buffer_scale.x;
+      translate_x = (target.x - this.target_position.x) * this.buffer_scale.x;
       clipped_width = this.level.canvas_width / (this.scale.x / this.buffer_scale.x);
       margin_zoom_x = (this.level.canvas_width - clipped_width) / 2;
       buffer_center_y = this.canvas_height / 2;
       canvas_center_y = this.level.canvas_height / 2;
-      translate_y = (moto.position().y - this.moto_position.y) * this.buffer_scale.y;
+      translate_y = (target.y - this.target_position.y) * this.buffer_scale.y;
       clipped_height = this.level.canvas_height / (this.scale.y / this.buffer_scale.y);
       margin_zoom_y = (this.level.canvas_height - clipped_height) / 2;
       return this.level.ctx.drawImage(this.canvas, buffer_center_x - canvas_center_x + translate_x + margin_zoom_x, buffer_center_y - canvas_center_y + translate_y + margin_zoom_y, clipped_width, clipped_height, 0, 0, this.level.canvas_width, this.level.canvas_height);
@@ -137,11 +138,21 @@
       }
     };
 
+    Camera.prototype.target = function() {
+      var options;
+      options = this.level.options;
+      if (options.replay_only) {
+        return this.level.ghosts.replay.current_frame().body.position;
+      } else {
+        return this.level.moto.body.GetPosition();
+      }
+    };
+
     Camera.prototype.init_scroll = function() {
       var canvas, scroll,
         _this = this;
       scroll = function(event) {
-        var delta;
+        var delta, max_limit_x, max_limit_y, min_limit_x, min_limit_y;
         if (event.wheelDelta) {
           delta = event.wheelDelta / 40;
         } else if (event.detail) {
@@ -151,17 +162,21 @@
         }
         _this.scale.x += (_this.scale.x / 200) * delta;
         _this.scale.y += (_this.scale.y / 200) * delta;
-        if (_this.scale.x < 25) {
-          _this.scale.x = 25;
+        min_limit_x = Constants.default_scale.x / 2;
+        min_limit_y = Constants.default_scale.y / 2;
+        max_limit_x = Constants.default_scale.x * 2;
+        max_limit_y = Constants.default_scale.y * 2;
+        if (_this.scale.x < min_limit_x) {
+          _this.scale.x = min_limit_x;
         }
-        if (_this.scale.y > -25) {
-          _this.scale.y = -25;
+        if (_this.scale.y > min_limit_y) {
+          _this.scale.y = min_limit_y;
         }
-        if (_this.scale.x > 200) {
-          _this.scale.x = 200;
+        if (_this.scale.x > max_limit_x) {
+          _this.scale.x = max_limit_x;
         }
-        if (_this.scale.y < -200) {
-          _this.scale.y = -200;
+        if (_this.scale.y < max_limit_y) {
+          _this.scale.y = max_limit_y;
         }
         return event.preventDefault() && false;
       };
@@ -181,6 +196,8 @@
 
     Constants.debug = false;
 
+    Constants.hooking = false;
+
     Constants.gravity = 9.81;
 
     Constants.max_moto_speed = 70.00;
@@ -189,7 +206,7 @@
 
     Constants.moto_acceleration = 8.00;
 
-    Constants.biker_force = 6.00;
+    Constants.biker_force = 11.00;
 
     Constants.fps = 60.0;
 
@@ -225,7 +242,7 @@
     Constants.left_wheel = {
       radius: 0.35,
       density: 1.8,
-      restitution: 0.5,
+      restitution: 0.3,
       friction: 1.4,
       position: {
         x: -0.70,
@@ -239,7 +256,7 @@
     Constants.right_wheel = {
       radius: 0.35,
       density: 1.8,
-      restitution: 0.5,
+      restitution: 0.3,
       friction: 1.4,
       position: {
         x: 0.70,
@@ -445,9 +462,24 @@
 
     Constants.ground = {
       density: 1.0,
-      restitution: 0.3,
-      friction: 1.0
+      restitution: 0.2,
+      friction: 1.2
     };
+
+    Constants.chain_reaction = function() {
+      var element, _i, _len, _ref, _results;
+      if (this.hooking === true) {
+        _ref = ['body', 'left_axle', 'right_axle', 'torso', 'lower_leg', 'upper_leg', 'lower_arm', 'upper_arm'];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          element = _ref[_i];
+          _results.push(Constants[element].collisions = false);
+        }
+        return _results;
+      }
+    };
+
+    Constants.chain_reaction();
 
     return Constants;
 
@@ -504,8 +536,10 @@
           case 13:
             return _this.level.need_to_restart = true;
           case 32:
-            if (!_this.level.moto.dead) {
-              return _this.level.flip_moto();
+            return _this.level.moto.flip();
+          case 69:
+            if (!$('input').is(':focus')) {
+              return _this.level.moto.rider.eject();
             }
             break;
           case 67:
@@ -536,9 +570,9 @@
     };
 
     Input.prototype.move = function() {
-      var biker_force, moto, moto_acceleration, rider;
+      var biker_force, mirror, moto, moto_acceleration;
       moto = this.level.moto;
-      rider = moto.rider;
+      mirror = moto.mirror;
       moto_acceleration = Constants.moto_acceleration;
       biker_force = Constants.biker_force;
       if (!this.level.moto.dead) {
@@ -549,29 +583,12 @@
           moto.right_wheel.SetAngularVelocity(0);
           moto.left_wheel.SetAngularVelocity(0);
         }
-        if (this.left) {
-          moto.body.ApplyTorque(biker_force / 0.7);
-          moto.rider.torso.ApplyTorque(biker_force / 2.0);
-          moto.rider.torso.ApplyForce({
-            x: -biker_force,
-            y: 0
-          }, moto.rider.torso.GetWorldCenter());
-          moto.rider.lower_leg.ApplyForce({
-            x: biker_force,
-            y: 0
-          }, moto.rider.lower_leg.GetWorldCenter());
+        if ((this.left && mirror === 1) || (this.right && mirror === -1)) {
+          moto.wheeling(biker_force);
         }
-        if (this.right) {
-          moto.body.ApplyTorque(-biker_force / 0.75);
-          moto.rider.torso.ApplyTorque(-biker_force / 2.2);
-          moto.rider.torso.ApplyForce({
-            x: biker_force,
-            y: 0
-          }, moto.rider.torso.GetWorldCenter());
-          return moto.rider.lower_leg.ApplyForce({
-            x: -biker_force,
-            y: 0
-          }, moto.rider.lower_leg.GetWorldCenter());
+        if ((this.right && mirror === 1) || (this.left && mirror === -1)) {
+          biker_force = -biker_force * 0.8;
+          return moto.wheeling(biker_force);
         }
       }
     };
@@ -653,7 +670,7 @@
       this.ctx.save();
       this.ctx.translate(this.canvas_width / 2, this.canvas_height / 2);
       this.ctx.scale(this.camera.scale.x, this.camera.scale.y);
-      this.ctx.translate(-this.object_to_follow().position().x, -this.object_to_follow().position().y - 0.25);
+      this.ctx.translate(-this.camera.target().x, -this.camera.target().y - 0.25);
       this.entities.display_items();
       this.moto.display();
       this.ghosts.display();
@@ -687,18 +704,14 @@
 
     Level.prototype.compute_visibility = function() {
       this.visible = {
-        left: this.object_to_follow().position().x - (this.canvas_width / 2) / this.camera.scale.x,
-        right: this.object_to_follow().position().x + (this.canvas_width / 2) / this.camera.scale.x,
-        bottom: this.object_to_follow().position().y + (this.canvas_height / 2) / this.camera.scale.y,
-        top: this.object_to_follow().position().y - (this.canvas_height / 2) / this.camera.scale.y
+        left: this.camera.target().x - (this.canvas_width / 2) / this.camera.scale.x,
+        right: this.camera.target().x + (this.canvas_width / 2) / this.camera.scale.x,
+        bottom: this.camera.target().y + (this.canvas_height / 2) / this.camera.scale.y,
+        top: this.camera.target().y - (this.canvas_height / 2) / this.camera.scale.y
       };
       this.visible.aabb = new b2AABB();
       this.visible.aabb.lowerBound.Set(this.visible.left, this.visible.bottom);
       return this.visible.aabb.upperBound.Set(this.visible.right, this.visible.top);
-    };
-
-    Level.prototype.flip_moto = function() {
-      return this.moto = MotoFlipService.execute(this.moto);
     };
 
     Level.prototype.got_strawberries = function() {
@@ -729,10 +742,6 @@
         _results.push(entity.display = true);
       }
       return _results;
-    };
-
-    Level.prototype.object_to_follow = function() {
-      return this.moto;
     };
 
     return Level;
@@ -766,7 +775,9 @@
             if (_this.level.got_strawberries()) {
               return _this.trigger_restart();
             }
-          } else if (Listeners.does_contact(a, b, 'rider', 'ground') && a.part !== 'lower_leg' && b.part !== 'lower_leg') {
+          } else if (Constants.hooking === false && Listeners.does_contact(a, b, 'rider', 'ground') && a.part !== 'lower_leg' && b.part !== 'lower_leg') {
+            return _this.kill_moto();
+          } else if (Constants.hooking === true && Listeners.does_contact(a, b, 'rider', 'ground') && (a.part === 'head' || b.part === 'head')) {
             return _this.kill_moto();
           } else if (Listeners.does_contact_moto_rider(a, b, 'wrecker')) {
             return _this.kill_moto();
@@ -818,6 +829,9 @@
         chrono: '#chrono',
         users: '#users .user',
         current_user: '#current-user',
+        replay_only: false,
+        replay_file: '',
+        zoom: Constants.default_scale.x,
         replay_id_attribute: 'data-replay-id',
         replay_steps_attribute: 'data-replay-steps',
         replay_name_attribute: 'data-replay-name',
@@ -830,6 +844,10 @@
       return $.extend(defaults, options);
     };
     options = initialize(options);
+    Constants.default_scale = {
+      x: options.zoom,
+      y: -options.zoom
+    };
     $(options.loading).show();
     level = new Level(options);
     level.load_from_file(level_filename);
@@ -1908,7 +1926,7 @@
       } else {
         ctx.save();
         ctx.scale(4.0, 4.0);
-        ctx.translate(-this.level.object_to_follow().position().x * 4, this.level.object_to_follow().position().y * 2);
+        ctx.translate(-this.level.camera.target().x * 4, this.level.camera.target().y * 2);
         ctx.fillStyle = ctx.createPattern(this.assets.get(this.file_name), "repeat");
         ctx.fill();
         return ctx.restore();
@@ -1925,21 +1943,25 @@
       this.replay = replay;
     }
 
-    Ghost.prototype.display = function() {
-      var mirror;
+    Ghost.prototype.display = function(transparent) {
+      var mirror, texture_prefix;
+      if (transparent == null) {
+        transparent = true;
+      }
       if (this.replay && !Constants.debug) {
         this.frame = this.current_frame();
         mirror = this.frame.mirror ? -1 : 1;
-        Moto.display_wheel(this.level, this.frame.left_wheel, Constants.left_wheel, mirror, 'ghost_');
-        Moto.display_wheel(this.level, this.frame.right_wheel, Constants.right_wheel, mirror, 'ghost_');
-        Moto.display_left_axle(this.level, this.frame.left_axle, Constants.left_axle, this.frame.body, this.frame.left_wheel, mirror, 'ghost_');
-        Moto.display_right_axle(this.level, this.frame.right_axle, Constants.right_axle, this.frame.body, this.frame.right_wheel, mirror, 'ghost_');
-        Moto.display_body(this.level, this.frame.body, Constants.body, mirror, 'ghost_');
-        Rider.display_part(this.level, this.frame.torso, Constants.torso, mirror, 'ghost_');
-        Rider.display_part(this.level, this.frame.upper_leg, Constants.upper_leg, mirror, 'ghost_');
-        Rider.display_part(this.level, this.frame.lower_leg, Constants.lower_leg, mirror, 'ghost_');
-        Rider.display_part(this.level, this.frame.upper_arm, Constants.upper_arm, mirror, 'ghost_');
-        return Rider.display_part(this.level, this.frame.lower_arm, Constants.lower_arm, mirror, 'ghost_');
+        texture_prefix = transparent ? 'ghost_' : '';
+        Moto.display_wheel(this.level, this.frame.left_wheel, Constants.left_wheel, mirror, texture_prefix);
+        Moto.display_wheel(this.level, this.frame.right_wheel, Constants.right_wheel, mirror, texture_prefix);
+        Moto.display_left_axle(this.level, this.frame.left_axle, Constants.left_axle, this.frame.body, this.frame.left_wheel, mirror, texture_prefix);
+        Moto.display_right_axle(this.level, this.frame.right_axle, Constants.right_axle, this.frame.body, this.frame.right_wheel, mirror, texture_prefix);
+        Moto.display_body(this.level, this.frame.body, Constants.body, mirror, texture_prefix);
+        Rider.display_part(this.level, this.frame.torso, Constants.torso, mirror, texture_prefix);
+        Rider.display_part(this.level, this.frame.upper_leg, Constants.upper_leg, mirror, texture_prefix);
+        Rider.display_part(this.level, this.frame.lower_leg, Constants.lower_leg, mirror, texture_prefix);
+        Rider.display_part(this.level, this.frame.upper_arm, Constants.upper_arm, mirror, texture_prefix);
+        return Rider.display_part(this.level, this.frame.lower_arm, Constants.lower_arm, mirror, texture_prefix);
       }
     };
 
@@ -1953,17 +1975,51 @@
 
   Ghosts = (function() {
     function Ghosts(level) {
-      var replay;
       this.level = level;
       this.assets = level.assets;
-      replay = new Replay(this.level).load();
-      this.player = new Ghost(this.level, replay);
-      this.others = [];
+      this.replay = this.load_replay();
+      this.player = this.load_player();
+      this.others = this.load_others();
     }
+
+    Ghosts.prototype.load_replay = function() {
+      var options, replay;
+      options = this.level.options;
+      if (options.replay_only) {
+        replay = new Replay(this.level);
+        replay.load(options.replay_file);
+        return new Ghost(this.level, replay);
+      } else {
+        return null;
+      }
+    };
+
+    Ghosts.prototype.load_player = function() {
+      var options, replay, replay_id, selector;
+      options = this.level.options;
+      selector = $(options.current_user);
+      replay_id = selector.attr(options.replay_id_attribute);
+      if (selector.length && replay_id.length > 0) {
+        replay = new Replay(this.level);
+        replay.load("" + replay_id + ".replay");
+        return new Ghost(this.level, replay);
+      } else {
+        return new Ghost(this.level, null);
+      }
+    };
+
+    Ghosts.prototype.load_others = function() {
+      return [];
+    };
 
     Ghosts.prototype.display = function() {
       var ghost, _i, _len, _ref, _results;
-      this.player.display();
+      if (this.player) {
+        this.player.display();
+      }
+      if (this.replay) {
+        this.replay.display(false);
+      }
       _ref = this.others;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -2052,10 +2108,6 @@
       return this.rider.init();
     };
 
-    Moto.prototype.position = function() {
-      return this.body.GetPosition();
-    };
-
     Moto.prototype.move = function() {
       var air_density, back_force, drag_force, input, object_penetration, rigidity, squared_speed, v;
       input = this.level.input;
@@ -2087,6 +2139,36 @@
         return this.left_wheel.SetAngularVelocity(Constants.max_moto_speed);
       } else if (this.left_wheel.GetAngularVelocity() < -Constants.max_moto_speed) {
         return this.left_wheel.SetAngularVelocity(-Constants.max_moto_speed);
+      }
+    };
+
+    Moto.prototype.wheeling = function(force) {
+      var force_leg, force_torso, moto_angle;
+      moto_angle = this.mirror * this.body.GetAngle();
+      this.body.ApplyTorque(this.mirror * force * 0.50);
+      force_torso = Math2D.rotate_point({
+        x: this.mirror * (-force),
+        y: 0
+      }, moto_angle, {
+        x: 0,
+        y: 0
+      });
+      force_torso.y = this.mirror * force_torso.y;
+      this.rider.torso.ApplyForce(force_torso, this.rider.torso.GetWorldCenter());
+      force_leg = Math2D.rotate_point({
+        x: this.mirror * force,
+        y: 0
+      }, moto_angle, {
+        x: 0,
+        y: 0
+      });
+      force_leg.y = this.mirror * force_leg.y;
+      return this.rider.lower_leg.ApplyForce(force_leg, this.rider.lower_leg.GetWorldCenter());
+    };
+
+    Moto.prototype.flip = function() {
+      if (!this.dead) {
+        return this.level.moto = MotoFlipService.execute(this);
       }
     };
 
@@ -2177,6 +2259,9 @@
 
     Moto.prototype.display = function() {
       if (Constants.debug) {
+        return false;
+      }
+      if (this.level.options.replay_only) {
         return false;
       }
       this.display_wheel(this.left_wheel, Constants.left_wheel);
@@ -2368,27 +2453,22 @@
       return new_replay;
     };
 
-    Replay.prototype.load = function() {
-      var options, replay_id, replay_steps, selector,
+    Replay.prototype.load = function(filename) {
+      var options, replay_steps, selector,
         _this = this;
       options = this.level.options;
       selector = $(options.current_user);
-      replay_id = selector.attr(options.replay_id_attribute);
       replay_steps = selector.attr(options.replay_steps_attribute);
-      if (selector.length && replay_id.length > 0) {
-        $.get("" + options.replays_path + "/" + replay_id + ".replay", function(data) {
-          _this.frames = ReplayConversionService.string_to_frames(data);
-          _this.success = true;
-          return _this.steps = parseInt(replay_steps);
-        });
-        return this;
-      } else {
-        return null;
-      }
+      $.get("" + options.replays_path + "/" + filename, function(data) {
+        _this.frames = ReplayConversionService.string_to_frames(data);
+        _this.success = true;
+        return _this.steps = parseInt(replay_steps);
+      });
+      return this;
     };
 
     Replay.prototype.save = function() {
-      return $.post(Constants.scores_path, {
+      return $.post(this.level.options.scores_path, {
         level: this.level.infos.identifier,
         time: this.level.current_time,
         steps: this.steps,
@@ -2544,6 +2624,23 @@
 
     Rider.prototype.position = function() {
       return this.moto.body.GetPosition();
+    };
+
+    Rider.prototype.eject = function() {
+      var adjusted_force_vector, eject_angle, force_vector;
+      if (!this.moto.dead) {
+        this.level.listeners.kill_moto();
+        force_vector = {
+          x: 150.0 * this.moto.mirror,
+          y: 0
+        };
+        eject_angle = this.mirror * this.moto.body.GetAngle() + Math.PI / 4.0;
+        adjusted_force_vector = Math2D.rotate_point(force_vector, eject_angle, {
+          x: 0,
+          y: 0
+        });
+        return this.torso.ApplyForce(adjusted_force_vector, this.torso.GetWorldCenter());
+      }
     };
 
     Rider.prototype.create_head = function() {
@@ -2955,37 +3052,29 @@
   };
 
   override_constants_by_url_params = function(params) {
-    var array, array_key, array_keys, i, key, value, _results;
-    _results = [];
+    var array, array_key, array_keys, i, key, value, _i, _len;
     for (key in params) {
       value = params[key];
       array_keys = key.split('.');
       array = Constants;
-      _results.push((function() {
-        var _i, _len, _results1;
-        _results1 = [];
-        for (i = _i = 0, _len = array_keys.length; _i < _len; i = ++_i) {
-          array_key = array_keys[i];
-          if (i === array_keys.length - 1) {
-            if (value === '') {
-              _results1.push(delete params[key]);
-            } else {
-              if (value === 'true' || value === 'false') {
-                _results1.push(array[array_key] = value === 'true');
-              } else if (array_key !== 'level') {
-                _results1.push(array[array_key] = parseFloat(value));
-              } else {
-                _results1.push(void 0);
-              }
-            }
+      for (i = _i = 0, _len = array_keys.length; _i < _len; i = ++_i) {
+        array_key = array_keys[i];
+        if (i === array_keys.length - 1) {
+          if (value === '') {
+            delete params[key];
           } else {
-            _results1.push(array = array[array_key]);
+            if (value === 'true' || value === 'false') {
+              array[array_key] = value === 'true';
+            } else if (array_key !== 'level') {
+              array[array_key] = parseFloat(value);
+            }
           }
+        } else {
+          array = array[array_key];
         }
-        return _results1;
-      })());
+      }
     }
-    return _results;
+    return Constants.chain_reaction();
   };
 
   display_constants = function() {
@@ -2995,7 +3084,8 @@
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       key = _ref[_i];
       value = Constants[key];
-      if (typeof value !== 'object') {
+      if (typeof value !== 'object' && typeof value !== 'function') {
+        console.log(typeof value);
         html += "<li><a href=\"" + document.URL + "&" + key + "=" + value + "\">" + key + "</a> (" + value + ")</li>";
       } else {
         html += "<li>" + key + "<ul>";

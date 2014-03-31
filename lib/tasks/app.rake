@@ -4,8 +4,8 @@ namespace :app  do
       puts "Cannot use this task in production"
     else
       # the ruby version is automatically defined in the .rbenv-version file
-      [ 'rm log/*.log',                                      # rm log files
-        "/bin/bash #{Dir.pwd}/bin/rename_tab.sh Server"      #
+      [ 'rm log/*.log',                                 # rm log files
+        "/bin/bash #{Dir.pwd}/bin/rename_tab.sh Server" #
       ].each do |command|
         puts command
         system(command)
@@ -25,6 +25,10 @@ namespace :app  do
     else
       system('rm -rf public/data/Replays')
       system('mkdir public/data/Replays')
+      system('touch public/data/Replays/.keep')
+      system('rm -rf public/data/Previews')
+      system('mkdir public/data/Previews')
+      system('touch public/data/Previews/.keep')
       system('rake db:migrate:reset')
       system('rake db:seed')
     end

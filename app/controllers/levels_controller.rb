@@ -8,11 +8,10 @@ class LevelsController < ApplicationController
   end
 
   def index
-    incompatible_levels = [15]
-    incompatible_levels.collect! { |level_file_id| "l#{level_file_id}.lvl" }
+    #@levels_with_score_ids = current_user ? current_user.level_user_links.pluck(:level_id) : []
 
-    @levels                = Level.where.not(:file_name => incompatible_levels)
-    @levels_with_score_ids = current_user ? current_user.level_user_links.pluck(:level_id) : []
+    files = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 27, 980, 1038, 1040, 1041, 1042, 1043, 1044].collect { |num| "l#{num}.lvl" }
+    @levels = Level.where(:file_name => files)
   end
 
   def capture
