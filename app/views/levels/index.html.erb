@@ -10,7 +10,7 @@
               height="250"
               data-current-level="<%= level.file_name %>"
               data-current-level-id="<%= level.id %>"
-              data-replay-file="<%= level.level_user_links.first.id %>.replay">
+              data-replay-file="<%= level.level_user_links.try(:first).try(:id) %>.replay">
       </canvas>
 
       <div id="loading_<%= level.id %>" class="loading">
