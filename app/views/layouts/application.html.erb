@@ -42,7 +42,8 @@
     <% if current_user %>
       <div id="current-user" data-id="<%= current_user.id if current_user %>"
                              data-replay-id="<%= yield :current_user_best_score_id %>"
-                             data-replay-steps="<%= yield :current_user_best_score_steps %>">
+                             data-replay-steps="<%= yield :current_user_best_score_steps %>"
+                             data-replay-active="true">
         <%= _("You are connected as %{name}" % { :name => current_user.name }) %>
         <%# link_to _("Signout"), signout_path %>
       </div>
