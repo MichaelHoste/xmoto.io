@@ -8,7 +8,7 @@ bind_images = ->
       canvas:      "#level_#{level_id}"
       loading:     "#loading_#{level_id}"
       chrono:      "#chrono_#{level_id}"
-      replay_only: true
+      replay_mode: true
       replay_file: replay_file
       zoom:        25.0
     )
