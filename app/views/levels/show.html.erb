@@ -1,3 +1,6 @@
+<%= link_to "Back to levels", levels_path %>
+<br/>
+
 <% content_for :current_user_best_score_id,    @best_score.try(:id).to_s %>
 <% content_for :current_user_best_score_steps, @best_score.try(:steps).to_s %>
 
