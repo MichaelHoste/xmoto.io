@@ -7,20 +7,22 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
 
   $http.get(url).then((result) ->
     $scope.scores = result.data
+    score.active = true for score in $scope.scores
     bind_pusher()
   )
 
-  $scope.$watch('scores', ->
+  $scope.refresh = ->
     level_file_name  = $('#xmoto').data('current-level')
     best_score_id    = $('#current-user').data('best-score-id')
     best_score_steps = $('#current-user').data('best-score-steps')
 
     replays = []
     for score in $scope.scores
-      replays.push(
-        file:  "#{score.id}.replay"
-        steps: score.steps
-      )
+      if score.active
+        replays.push(
+          file:  "#{score.id}.replay"
+          steps: score.steps
+        )
 
     $.xmoto(level_file_name,
       best_score_file:  "#{best_score_id}.replay"
@@ -28,6 +30,9 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
       best_score_ghost: false       # Will be displayed as a replay (by choice)
       replays: replays
     )
+
+  $scope.$watchCollection('scores', ->
+    $scope.refresh()
   )
 
   bind_pusher = ->

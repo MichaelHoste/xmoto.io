@@ -17,13 +17,12 @@
 </div>
 
 <div id="scores" ng-controller="ScoresCtrl">
-  <div ng-repeat="score in scores" class="user"
-       data-replay-id="{{ score.id }}"
-       data-replay-steps="{{ score.steps }}"
-       data-replay-user-id="{{ score.user_id }}"
-       data-replay-active="true"
-       title="creation date: {{ score.updated_at }}"
-       ng-cloak>
+  <div ng-repeat="score in scores"
+       ng-click="score.active = !score.active;refresh()"
+       ng-class="{ selected: score.active }"
+       ng-cloak
+       class="user"
+       title="creation date: {{ score.updated_at }}">
     <div class="picture">
       <img ng-src="{{ score.user_picture }}"/>
     </div>

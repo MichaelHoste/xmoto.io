@@ -12,19 +12,10 @@
               data-current-level-id="<%= level.id %>"
               data-replay-file="<%= level.level_user_links.try(:first).try(:id) %>.replay">
       </canvas>
-
-      <div id="loading_<%= level.id %>" class="loading">
-        Loading, please wait...
-      </div>
-
-      <div id="chrono<%= level.id %>" class="chrono">
-        0:00
-      </div>
     <% end %>
   <% end %>
 
   <% if level.level_user_links.where(:user_id => current_user.id).present? %>
-    score
   <% end %>
   <br/>
 <% end %>

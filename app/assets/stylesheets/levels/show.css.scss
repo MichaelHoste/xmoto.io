@@ -47,6 +47,10 @@
       margin-bottom: 5px;
     }
 
+    .user.selected {
+      background-color: rgb(202, 255, 192);
+    }
+
     .user:last-child {
       margin-bottom:0px;
     }
