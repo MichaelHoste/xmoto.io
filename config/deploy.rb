@@ -1,7 +1,7 @@
 set :application, 'xmoto_io'
 set :repo_url,    'git@github.com:MichaelHoste/xmoto.io.git'
 set :deploy_to,   "/home/deploy/apps/xmoto_io"
-set :linked_files, %w{config/database.yml config/initializers/pusher.rb config/initializers/facebook.rb}
+set :linked_files, %w{config/database.yml config/initializers/pusher.rb config/initializers/facebook.rb, config/initializers/errbit.rb}
 set :linked_dirs,  %w{bin log tmp vendor/bundle public/system public/data/Replays public/data/Previews}
 
 set :rbenv_type, 'user'
@@ -41,6 +41,7 @@ namespace :deploy do
     on roles(:app) do
       upload! "config/initializers/facebook.rb", "#{deploy_to}/shared/config/initializers/facebook.rb"
       upload! "config/initializers/pusher.rb",   "#{deploy_to}/shared/config/initializers/pusher.rb"
+      upload! "config/initializers/errbit.rb",   "#{deploy_to}/shared/config/initializers/errbit.rb"
       upload! "config/database.yml",             "#{deploy_to}/shared/config/database.yml"
 
       execute :sudo, "unlink /etc/nginx/sites-enabled/#{fetch(:application)};true"

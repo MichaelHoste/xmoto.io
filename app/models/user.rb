@@ -57,8 +57,8 @@ class User < ActiveRecord::Base
       user.f_last_name    = auth.info.last_name
       user.f_username     = auth.extra.raw_info.username
       user.f_link         = auth.extra.raw_info.link
-      user.f_location     = auth.extra.raw_info.location.name
-      user.f_location_id  = auth.extra.raw_info.location.id
+      user.f_location     = auth.extra.raw_info.location.name if auth.extra.raw_info.location
+      user.f_location_id  = auth.extra.raw_info.location.id   if auth.extra.raw_info.location
       user.f_timezone     = auth.extra.raw_info.timezone
       user.f_updated_time = auth.extra.raw_info.updated_time
       user.f_verified     = auth.extra.raw_info.verified
