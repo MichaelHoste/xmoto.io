@@ -20,9 +20,9 @@
   <% if current_user_score.present? and best_score.present? %>
     <% delta = current_user_score.first.steps - best_score.steps %>
     <% if delta >= 0 %>
-      <span class="green"><%= ('%.2f' % (delta / 60.0).round(2)).gsub('.', ':') %></span>
-    <% else %>
       <span class="red"><%= ('%.2f' % (delta / 60.0).round(2)).gsub('.', ':') %></span>
+    <% else %>
+      <span class="green"><%= ('%.2f' % (delta / 60.0).round(2)).gsub('.', ':') %></span>
     <% end %>
   <% end %>
   <br/>
