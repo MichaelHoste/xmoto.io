@@ -24,7 +24,11 @@ class Level < ActiveRecord::Base
 
   # Methods
 
+  def best_score(user_id = nil)
+    level_user_links.where.not(:user_id => user_id).order('steps ASC').try(:first)
+  end
+
   def to_param
-     level_identifier
-   end
+    level_identifier
+  end
 end
