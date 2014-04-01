@@ -44,6 +44,7 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
     for score, i in $scope.scores
       if parseInt(score.user_id) == parseInt(new_score.user_id)
          $scope.scores.splice(i, 1)
+         break
 
     # place new score in array and sort array by steps
     $scope.scores.push(new_score)
