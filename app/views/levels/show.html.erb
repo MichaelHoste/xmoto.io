@@ -18,7 +18,7 @@
 
 <div id="scores" ng-controller="ScoresCtrl">
   <div ng-repeat="score in scores"
-       ng-click="score.active = !score.active;refresh()"
+       ng-click="score.active = !score.active;refresh_replays()"
        ng-class="{ selected: score.active }"
        ng-cloak
        class="user"

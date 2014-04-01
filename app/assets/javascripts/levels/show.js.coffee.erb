@@ -9,9 +9,10 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
     $scope.scores = result.data
     score.active = true for score in $scope.scores
     bind_pusher()
+    $scope.refresh_replays()
   )
 
-  $scope.refresh = ->
+  $scope.refresh_replays = ->
     level_file_name  = $('#xmoto').data('current-level')
     best_score_id    = $('#current-user').data('best-score-id')
     best_score_steps = $('#current-user').data('best-score-steps')
@@ -25,15 +26,11 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
         )
 
     $.xmoto(level_file_name,
-      best_score_file:  "#{best_score_id}.replay"
+      best_score_file: if best_score_id.length then "#{best_score_id}.replay" else ""
       best_score_steps: best_score_steps
       best_score_ghost: false       # Will be displayed as a replay (by choice)
       replays: replays
     )
-
-  $scope.$watchCollection('scores', ->
-    $scope.refresh()
-  )
 
   bind_pusher = ->
     pusher  = new Pusher("<%= Pusher.key %>")

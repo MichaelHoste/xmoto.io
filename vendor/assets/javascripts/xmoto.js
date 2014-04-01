@@ -1997,11 +1997,14 @@
       replay_file = options.best_score_file;
       replay_steps = options.best_score_steps;
       if (replay_file.length > 0) {
+        console.log("A");
+        console.log(replay_file);
         replay = new Replay(this.level);
         replay.load("" + replay_file);
         replay.steps = replay_steps;
         return new Ghost(this.level, replay);
       } else {
+        console.log("B");
         return new Ghost(this.level, null);
       }
     };
