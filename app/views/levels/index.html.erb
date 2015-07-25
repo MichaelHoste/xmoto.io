@@ -8,9 +8,9 @@
       <canvas id="level_<%= level.id %>"
               width="400"
               height="250"
-              data-current-level="<%= level.file_name %>"
-              data-current-level-id="<%= level.id %>"
-              data-replay-file="<%= level.scores.try(:first).try(:id) %>.replay">
+              data-level-id="<%= level.id %>"
+              data-level-filename="<%= level.file_name %>"
+              data-replay="<%= level.scores.try(:first).try(:replay) %>">
       </canvas>
     <% end %>
   <% end %>

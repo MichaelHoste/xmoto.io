@@ -20,15 +20,13 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
     )
 
   $scope.load_xmoto = ->
-    level_file_name   = $('#level').data('level-file-name')
+    level_file_name = $('#level').data('level-filename')
 
     replays = []
     for score in $scope.scores
       if score.active
         replays.push(
-          file_or_string: score.replay
-          steps:          score.steps
-          is_player:      true
+          replay: score.replay
         )
 
     $.xmoto(level_file_name,
@@ -50,8 +48,10 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
          $scope.scores.splice(i, 1)
          break
 
-    # place new score in array and sort array by steps
+    # place new score in array
     $scope.scores.push(new_score)
+
+    # sort array by steps
     $scope.scores.sort((a, b) ->
       if a.steps < b.steps || (a.steps == b.steps && parseInt(b.user_id) == current_user_id)
         return -1

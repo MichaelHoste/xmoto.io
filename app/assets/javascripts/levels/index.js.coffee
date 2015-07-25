@@ -1,15 +1,15 @@
 bind_images = ->
   $('img').on('mouseenter', ->
-    level_file  = $(this).next('canvas').data('current-level')
-    level_id    = $(this).next('canvas').data('current-level-id')
-    replay_file = $(this).next('canvas').data('replay-file')
+    level_id       = $(this).next('canvas').data('level-id')
+    level_filename = $(this).next('canvas').data('level-filename')
+    replay         = $(this).next('canvas').data('replay')
 
-    $.xmoto(level_file,
+    $.xmoto(level_filename,
       canvas:      "#level_#{level_id}"
       loading:     "#loading_#{level_id}"
       chrono:      "#chrono_#{level_id}"
-      replay_mode: true
-      replay_file: replay_file
+      playable:    false
+      replays:     [{ replay: replay, follow: true }]
       zoom:        25.0
     )
 
