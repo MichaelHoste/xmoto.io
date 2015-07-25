@@ -5,9 +5,9 @@ XmotoIo::Application.routes.draw do
     member do
       post :capture
     end
-  end
 
-  resources :level_user_links
+    resources :scores
+  end
 
   # OmniAuth (facebook)
   match '/auth/:provider/callback', :to => 'sessions#create', :via => [:get, :post]

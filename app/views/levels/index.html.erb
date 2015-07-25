@@ -10,12 +10,12 @@
               height="250"
               data-current-level="<%= level.file_name %>"
               data-current-level-id="<%= level.id %>"
-              data-replay-file="<%= level.level_user_links.try(:first).try(:id) %>.replay">
+              data-replay-file="<%= level.scores.try(:first).try(:id) %>.replay">
       </canvas>
     <% end %>
   <% end %>
 
-  <% current_user_score = level.level_user_links.where(:user_id => current_user.id) %>
+  <% current_user_score = level.scores.where(:user_id => current_user.id) %>
   <% best_score = level.best_score(current_user) %>
   <% if current_user_score.present? and best_score.present? %>
     <% delta = current_user_score.first.steps - best_score.steps %>

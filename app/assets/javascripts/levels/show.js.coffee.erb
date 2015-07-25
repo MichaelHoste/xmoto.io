@@ -1,35 +1,39 @@
 angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope", "$http", ($scope, $http) ->
   level_identifier = $("#level").data('level-identifier')
   current_user_id  = parseInt($('#current-user').data('id'))
-  url              = "/level_user_links.json?level=#{level_identifier}"
+  url              = "/levels/#{level_identifier}/scores.json"
+  $scope.scores    = []
 
-  $scope.scores = []
-
-  $http.get(url).then((result) ->
-    $scope.scores = result.data
-    score.active = true for score in $scope.scores
+  initialize = ->
+    load_scores()
     bind_pusher()
-    $scope.refresh_replays()
-  )
 
-  $scope.refresh_replays = ->
-    level_file_name  = $('#xmoto').data('current-level')
-    best_score_id    = $('#current-user').data('best-score-id')
-    best_score_steps = $('#current-user').data('best-score-steps')
+  load_scores = ->
+    $http.get(url).then((result) ->
+      $scope.scores = result.data
+
+      for i in [0..4]
+        if i < $scope.scores.length
+          $scope.scores[i].active = true
+
+      $scope.load_xmoto()
+    )
+
+  $scope.load_xmoto = ->
+    level_file_name   = $('#level').data('level-file-name')
 
     replays = []
     for score in $scope.scores
       if score.active
         replays.push(
-          file:  "#{score.id}.replay"
-          steps: score.steps
+          file_or_string: score.replay
+          steps:          score.steps
+          is_player:      true
         )
 
     $.xmoto(level_file_name,
-      best_score_file: if best_score_id.length then "#{best_score_id}.replay" else ""
-      best_score_steps: best_score_steps
-      best_score_ghost: false       # Will be displayed as a replay (by choice)
-      replays: replays
+      replays:     replays
+      scores_path: url
     )
 
   bind_pusher = ->
@@ -62,4 +66,6 @@ angular.module('XMotoApp', ['GlobalConfig']).controller('ScoresCtrl', ["$scope",
     # Effect on new score
     setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('pulsate', 'easeOutCubic', 1500)), 400)
     setTimeout((-> $(".score[data-id='#{new_score.id}']").effect('highlight', 'easeOutCirc', 1500)), 400)
+
+  initialize()
 ])

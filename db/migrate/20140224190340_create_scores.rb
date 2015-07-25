@@ -1,11 +1,11 @@
-class CreateLevelUserLinks < ActiveRecord::Migration
+class CreateScores < ActiveRecord::Migration
   def change
-    create_table :level_user_links do |t|
+    create_table :scores do |t|
       t.references :user,  :index => true
       t.references :level, :index => true
       t.integer    :time
       t.integer    :steps
-      t.integer    :fps
+      t.text       :replay
 
       t.timestamps
     end

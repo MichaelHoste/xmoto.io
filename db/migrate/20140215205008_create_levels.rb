@@ -13,6 +13,8 @@ class CreateLevels < ActiveRecord::Migration
       t.string  :level_pack_num
       t.string  :rversion
 
+      t.string  :preview
+
       t.timestamps
     end
 

@@ -1,4 +1,4 @@
-class LevelUserLink < ActiveRecord::Base
+class Score < ActiveRecord::Base
   # Constants
 
   # Attributes
@@ -13,7 +13,7 @@ class LevelUserLink < ActiveRecord::Base
   # Validations
 
   # user_id can be null for anonymous scores
-  validates :level_id, :time, :steps, :fps,
+  validates :level_id, :time, :steps, :replay,
             :presence => true
 
   # Callbacks
@@ -31,7 +31,7 @@ class LevelUserLink < ActiveRecord::Base
       :user_picture => user.profile_picture,
       :user_link    => user.f_link,
       :steps        => steps,
-      :fps          => fps,
+      :replay       => replay,
       :updated_at   => updated_at }
   end
 end

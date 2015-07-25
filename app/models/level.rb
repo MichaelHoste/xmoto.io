@@ -10,7 +10,7 @@ class Level < ActiveRecord::Base
 
   # Associations
 
-  has_many :level_user_links
+  has_many :scores
 
   # Validations
 
@@ -25,7 +25,7 @@ class Level < ActiveRecord::Base
   # Methods
 
   def best_score(user_id = nil)
-    level_user_links.where.not(:user_id => user_id).order('steps ASC').try(:first)
+    scores.where.not(:user_id => user_id).order('steps ASC').try(:first)
   end
 
   def to_param

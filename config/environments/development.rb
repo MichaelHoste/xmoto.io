@@ -28,8 +28,8 @@ XmotoIo::Application.configure do
   config.assets.debug = true
 
   # Brings logs in STDOUT in development
-  config.logger = Logger.new(STDOUT)
-  config.logger.level = Logger.const_get(
-    ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].upcase : 'DEBUG'
-  )
+  # config.logger = Logger.new(STDOUT)
+  # config.logger.level = Logger.const_get(
+  #   ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].upcase : 'DEBUG'
+  # )
 end

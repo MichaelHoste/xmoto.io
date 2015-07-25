@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140310184604) do
+ActiveRecord::Schema.define(version: 20140224190340) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -29,19 +29,6 @@ ActiveRecord::Schema.define(version: 20140310184604) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "level_user_links", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "level_id"
-    t.integer  "time"
-    t.integer  "steps"
-    t.integer  "fps"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "level_user_links", ["level_id"], name: "index_level_user_links_on_level_id", using: :btree
-  add_index "level_user_links", ["user_id"], name: "index_level_user_links_on_user_id", using: :btree
-
   create_table "levels", force: true do |t|
     t.string   "file_name"
     t.string   "name"
@@ -52,12 +39,25 @@ ActiveRecord::Schema.define(version: 20140310184604) do
     t.string   "level_pack"
     t.string   "level_pack_num"
     t.string   "rversion"
+    t.string   "preview"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "preview"
   end
 
   add_index "levels", ["level_identifier"], name: "index_levels_on_level_identifier", unique: true, using: :btree
+
+  create_table "scores", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "level_id"
+    t.integer  "time"
+    t.integer  "steps"
+    t.text     "replay"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "scores", ["level_id"], name: "index_scores_on_level_id", using: :btree
+  add_index "scores", ["user_id"], name: "index_scores_on_user_id", using: :btree
 
   create_table "user_user_links", force: true do |t|
     t.integer  "user_id",    limit: 8
@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(version: 20140310184604) do
     t.string   "picture"
     t.string   "gender"
     t.string   "locale"
-    t.string   "provider"
     t.integer  "f_id",               limit: 8
     t.string   "f_token"
     t.string   "f_first_name"

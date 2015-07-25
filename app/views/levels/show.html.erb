@@ -1,11 +1,10 @@
 <%= link_to "Back to levels", levels_path %>
 <br/>
 
-<% content_for :current_user_best_score_id,    @best_score.try(:id).to_s %>
-<% content_for :current_user_best_score_steps, @best_score.try(:steps).to_s %>
-
-<div id="level" data-level-identifier="<%= @level.level_identifier %>">
-  <canvas id="xmoto" width="960"  height="600" data-current-level="<%= @level.file_name %>"></canvas>
+<div id="level"
+     data-level-identifier="<%= @level.level_identifier %>"
+     data-level-file-name="<%= @level.file_name %>">
+  <canvas id="xmoto" width="960" height="600"></canvas>
 
   <div id="loading">
     Loading, please wait...
